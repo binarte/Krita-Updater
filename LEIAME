@@ -1,0 +1,54 @@
+
+################################################################################
+#                                                                              #
+# Baixador e atualizador para o Krita                                          #
+#                                                                              #
+################################################################################
+
+Este script foi feito para ter sempre a versão mais recente do krita à mão.
+
+Para user, simplesmente execute o script no lugar do seu appimage comun do 
+Krita. O script irá abrir o Krita enqunto verifica por novas versões. Você será
+notificado se uma nova versão for encontrada e quando terminar de baixá-la. Para
+abrer a nova versão, apenas encerre o krita e execute o script novamente.
+
+Observe que este script requer algumas presunções:
+ • Que todos as appimages têm seus nomes de arquivo originais;
+ • Que você não tem arquivos de appimage não-Krita com nomes parecidos com
+   appimages do Krita no mesmo diretório onde o script é executado;
+ • Que você está executando o script no mesmo diretório onde você pôe os
+   appimages do Krita;
+ • Que o dirotório onde o script está possui permissões de leitura e escrita
+   para o usuário que o estiver executando;
+ • Que você mesmo vai remover as versões obsoletas. Isto é para que você não
+   tenha que baixar o krita novamente você mesmo caso haja algum bug novo na
+   nova versão;
+ • Que o site do KDE não vai mudar o local nem o layaut da página de onde baixar
+   appimages do Krita. Caso isso aconteça, me contate. No caso de eu estar
+   inalcançável ou indisponível para consertar o script, o script está em
+   licença MIT, logo qualquer pessoa pode consertar e publicar o script ela
+   mesma;
+
+Para melhores práticas, você deveria criar um diretório apenas para appimages do
+Krita e executar o script a partir dalí. Você nem precisa ter uma appimage do
+Krita inicialmente, você pode apenas executar este script que ele vai baixar e
+executar automaticamente para você!
+
+Você também pode especificar qual tipo de versão você quer abrir, como:
+./krita.py STABLE
+
+Isto também permite especificar parâmetros de linha de comando, como:
+./krita.py STABLE --version
+
+Caso deseja apenas atualizar sem abrir o Krita, execute:
+./krita.py norun
+
+Note que o script vai procurar a opçsao versão mais recente e estável dentro do
+tipo especificado. Então, se houver a versão 3.0 beta e a versão 3.0 estável
+disponíveis e você especificar que quer abrir a versão beta, o script vai abrir
+a versão estável assim mesmo, pois é a mais recente. Mas se você pedir pela
+versão prealpha e o prealpha 4.0 estiver disponível será aberto até que uma
+versão 4.0 em modo alpha, beta, rc ou estável estiver disponível.
+
+Caso queira me contatar, o meio mais rápido é por @jackmcslay no twitter
+
