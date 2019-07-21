@@ -18,11 +18,15 @@ import urllib2
 import re
 import subprocess
 import locale
+
 from distutils.version import LooseVersion, StrictVersion
 from subprocess import call
+from subprocess import check_output
 from os import listdir
 from os.path import isfile, join
 
+true = 1
+false = 0
 repoStable = "https://download.kde.org/stable/krita/"
 repoUnstable = "https://download.kde.org/unstable/krita/"
 priority = ["STABLE","rc","beta","alpha","prealpha"]
@@ -56,10 +60,9 @@ def findVersions(url):
 		for m in re.finditer(r"<td.*?>\s*(.*?)\s*</td>",trdata):
 			vals.append(m.group(1))
 		if len(vals) and vals[3] == "-":
-			href = re.search(r"href=\"(.*?)\"", vals[1])
-			path = href.group(1)
-			if path[0] != '/':
-				rversions.append (path.strip("/"))
+			href = re.search(r"href=\"([0-9].*?)\"", vals[1])
+			if href and href.group(1)[0] != '/':
+				rversions.append (href.group(1).strip("/"))
 	return rversions
 
 #create command and run krita
@@ -76,6 +79,13 @@ def runKrita(location):
 def showMsg(message):
 	print(message)
 	call(["notify-send", message]);
+
+
+#download a file
+def downloadFile(basename):
+	filename = join(localDir,basename)
+	call(["wget", "-cO", filename + ".download", repoStable + "/" + curVersion + "/" + basename]);	
+	call (["mv", filename+".download", filename])
 
 #find out which versions are currently available
 for fname in files:
@@ -154,11 +164,20 @@ if curVersion != bestVersions["STABLE"]:
 		"es":"Se ha encontrado una nueva versión del Krita: " + curVersion + ", bajando"
 	},"Found new Krita version: " + curVersion + ", downloading"))
 	
-	filename = "krita-" + curVersion + "-x86_64.appimage"
-	localfile = join(localdir,filename);
-	call(["wget", "-cO", localfile + ".download", repoStable + "/" + curVersion + "/" + filename]);
+	localfile = "krita-" + curVersion + "-x86_64.appimage"
+	#localfile = join(localdir,filename);
+	gmic = "gmic_krita_qt-x86_64.appimage"
+	#gmic = join(localdir,filename);
+	md5sum = "md5sum-"+curVersion+".txt"
+	md5sum = join(localdir,md5sum);
+	
+	call(["wget", "-cO", md5sum, repoStable + "/" + curVersion + "/md5sum.txt"]);
+	
+	downloadFile(localfile)
+	downloadFile(gmic)
 	
 	os.rename(localfile + ".download", localfile)
+	os.rename(gmic + ".download", gmic)
 	st = os.stat(localfile)
 	os.chmod(localfile, st.st_mode | stat.S_IEXEC)
 	
