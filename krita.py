@@ -82,7 +82,7 @@ def showMsg(message):
 
 
 #download a file
-def downloadFile(basename):
+def downloadFile(basename,localDir):
 	filename = join(localDir,basename)
 	call(["wget", "-cO", filename + ".download", repoStable + "/" + curVersion + "/" + basename]);	
 	call (["mv", filename+".download", filename])
@@ -173,11 +173,11 @@ if curVersion != bestVersions["STABLE"]:
 	
 	call(["wget", "-cO", md5sum, repoStable + "/" + curVersion + "/md5sum.txt"]);
 	
-	downloadFile(localfile)
-	downloadFile(gmic)
+	downloadFile(localfile,localdir)
+	downloadFile(gmic,localdir)
 	
-	os.rename(localfile + ".download", localfile)
-	os.rename(gmic + ".download", gmic)
+	#os.rename(localfile + ".download", localfile)
+	#os.rename(gmic + ".download", gmic)
 	st = os.stat(localfile)
 	os.chmod(localfile, st.st_mode | stat.S_IEXEC)
 	
@@ -202,4 +202,3 @@ print(loc({
 	 "pt":"Concluído.",
 	 "es":"Concluido."
 	},"Done."))
-
